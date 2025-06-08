@@ -21,6 +21,9 @@ app.get('/api/test', (req, res) => {
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
 
+const eventRoutes = require('./routes/eventRoutes');
+app.use('/api/events', eventRoutes);
+
 // Add error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
