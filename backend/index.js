@@ -5,7 +5,11 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: 'http://localhost:3000', // your React frontend
+  credentials: true                // allow cookies/headers
+}));
 app.use(cookieParser());
 app.use(express.json());
 
