@@ -6,18 +6,40 @@ const auth = require('../middleware/auth');
 // Create event
 router.post('/', auth, async (req, res) => {
   try {
-    const { title, category, outcomes, startTime } = req.body;
+    const {
+      title,
+      category,
+      outcomes,
+      startTime,
+      endTime,
+      visibility,
+      invitedUsers,
+      minStake,
+      maxStake
+    } = req.body;
 
-    // Use default outcomes if not provided or invalid
-    const finalOutcomes = Array.isArray(outcomes) && outcomes.length >= 2 
-      ? outcomes 
-      : ["Yes", "No"];
+    // Validate date formats
+    const start = new Date(startTime);
+    const end = new Date(endTime);
+    if (isNaN(start) || isNaN(end)) {
+      return res.status(400).json({ error: 'Invalid date format for startTime or endTime' });
+    }
+
+    // Validate private event requirements
+    if (visibility === 'private' && (!Array.isArray(invitedUsers) || invitedUsers.length === 0)) {
+      return res.status(400).json({ error: 'Private events require at least one invited user' });
+    }
 
     const event = new Event({
       title,
       category,
-      outcomes: finalOutcomes,
-      startTime: new Date(startTime),
+      outcomes: Array.isArray(outcomes) && outcomes.length >= 2 ? outcomes : ['Yes', 'No'],
+      startTime: start,
+      endTime: end,
+      visibility: visibility || 'public',
+      invitedUsers: visibility === 'private' ? invitedUsers : [],
+      minStake: typeof minStake === 'number' ? minStake : 0,
+      maxStake: typeof maxStake === 'number' ? maxStake : 100,
       creator: req.user.id
     });
 
@@ -27,7 +49,6 @@ router.post('/', auth, async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
 
 // Get all upcoming events
 router.get('/', async (req, res) => {
