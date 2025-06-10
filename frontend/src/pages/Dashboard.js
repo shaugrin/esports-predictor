@@ -17,7 +17,7 @@ const Dashboard = () => {
         setUser(userData);
         
         // Fetch user's events (created and participating)
-        const response = await API.get('/api/events/my-events');
+        const response = await API.get('/events/my-events');
         setEvents(response.data);
       } catch (err) {
         console.error('Failed to fetch dashboard data:', err);

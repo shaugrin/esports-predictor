@@ -18,7 +18,7 @@ export const logout = async () => {
 
 export const getCurrentUser = async () => {
   try {
-    const response = await API.get('/api/auth/profile');
+    const response = await API.get('/auth/profile');
     return response.data;
   } catch (err) {
     throw new Error('Failed to fetch user data');
