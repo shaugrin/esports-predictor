@@ -26,6 +26,16 @@ const userSchema = new mongoose.Schema({
   }
 });
 
+// Add to userSchema
+userSchema.virtual('events', {
+  ref: 'Event',
+  localField: '_id',
+  foreignField: 'creator'
+});
+
+// Enable virtuals in toJSON output
+userSchema.set('toJSON', { virtuals: true });
+
 // Hash password before saving
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();

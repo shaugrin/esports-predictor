@@ -24,4 +24,32 @@ router.get('/search', auth, async (req, res) => {
   }
 });
 
+router.get('/profile', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id)
+      .select('-password')
+      .populate({
+        path: 'events',
+        select: 'title status',
+        options: { limit: 5, sort: { createdAt: -1 } }
+      });
+      
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      createdAt: user.createdAt,
+      points: user.points || 0,
+      recentEvents: user.events || []
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 module.exports = router;
