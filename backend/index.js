@@ -34,6 +34,9 @@ app.use('/api/events', eventRoutes);
 const userRoutes = require('./routes/userRoutes');
 app.use('/api/users', userRoutes);
 
+const predictionRoutes = require('./routes/predictionRoutes');
+app.use('/api/predictions', predictionRoutes);
+
 // Add error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
