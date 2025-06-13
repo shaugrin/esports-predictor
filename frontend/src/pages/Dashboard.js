@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FiPlusCircle, FiCalendar, FiAward, FiUser } from 'react-icons/fi';
 import API from '../services/api';
 import { getCurrentUser } from '../services/auth';
+import EventCard from '../components/EventCard'; // Adjust the import path as needed
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -126,32 +127,7 @@ const Dashboard = () => {
         ) : (
           <div className="space-y-4">
             {events.slice(0, 5).map(event => (
-              <div 
-                key={event._id} 
-                className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors"
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="font-bold text-gray-800">{event.title}</h3>
-                    <div className="text-sm text-gray-600 mt-1">
-                      <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded mr-2">
-                        {event.category}
-                      </span>
-                      <span>Ends: {new Date(event.endTime).toLocaleString()}</span>
-                    </div>
-                  </div>
-                  <div className="badge badge-outline">
-                    {event.visibility === 'private' ? 'Private' : 'Public'}
-                  </div>
-                </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {event.outcomes.map((outcome, index) => (
-                    <div key={index} className="badge badge-ghost">
-                      {outcome}
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <EventCard key={event._id} event={event} />
             ))}
           </div>
         )}

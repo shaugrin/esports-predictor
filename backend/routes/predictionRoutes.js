@@ -61,7 +61,7 @@ router.get('/event/:eventId', async (req, res) => {
   }
 });
 
-// Get user's predictions
+// Get user's predictions 
 router.get('/my-predictions', auth, async (req, res) => {
   try {
     const predictions = await Prediction.find({ 
